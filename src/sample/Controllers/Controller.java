@@ -157,6 +157,7 @@ public class Controller {
         player.setAudioSpectrumNumBands(1);
         player.setAudioSpectrumInterval(0.05);
         player.volumeProperty().bindBidirectional(volumeSlider.valueProperty());player.play();
+        SongListView.requestFocus();
     }
 
     public void pauseSong(ActionEvent actionEvent) {
@@ -176,14 +177,16 @@ public class Controller {
             FileChooser.ExtensionFilter extensionFilter=new FileChooser.ExtensionFilter(" Music (*.mp3)","*.mp3");
             fileChooser.getExtensionFilters().add(extensionFilter);
             List<File> file=fileChooser.showOpenMultipleDialog(mainWindow.getScene().getWindow());
-            List<Song> songs=new ArrayList<>();
-            for(File s:file)
-            {
-                String name=s.getName().substring(0,s.getName().indexOf('.'));
-                String path=s.getPath();
-                songs.add(new Song(name,path));
+            if(file!=null){
+                List<Song> songs=new ArrayList<>();
+                for(File s:file)
+                {
+                    String name=s.getName().substring(0,s.getName().indexOf('.'));
+                    String path=s.getPath();
+                    songs.add(new Song(name,path));
+                }
+                DataHandler.getInstance().addSongs(songs);
             }
-            DataHandler.getInstance().addSongs(songs);
         });
         volumeSlider.setMax(1);
         volumeSlider.setValue(1);
